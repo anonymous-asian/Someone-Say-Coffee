@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Someone Say Coffee?</title>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <link rel="icon" href="images/coffee.png">
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+      height: 100%;
+    }
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="map"></div>
+
+  <!-- Javascript call to Google Maps with geolocation -->
+  <script src="js/geolocation_map.js"></script>
+  <!-- Maps JS call with places -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoBiK0VVo0lvfzZ8uI39psPyrb4iQyhgU&libraries=places&callback=initMap"></script>
+
+</body>
+</html>
