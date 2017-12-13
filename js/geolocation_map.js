@@ -80,8 +80,13 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.open(map);
 }
 
+// Function to request next page of results
+function nextPage() {
+    service.textSearch(request, callback, pagnation);
+}
+
 // Search
-function callback(results, status) {
+function callback(results, status, pagnation) {
     console.log(results.length);
     console.log(results);
     if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -96,7 +101,7 @@ function callback(results, status) {
                 service = new google.maps.places.PlacesService(map);
                 setTimeout(function() {
                     service.getDetails(request, callback);
-                }, j*375);
+                }, j*1000);
 
 
             })(i);
@@ -117,6 +122,12 @@ function callback(results, status) {
                 }
             }
         }
+    }
+
+    // If there were more than 20 results, request next page
+    if(pagnation.hasNextPage) {
+      //sleep: 2;
+      pagnation.nextPage();
     }
   }
 
