@@ -9,6 +9,12 @@ var map, infoWindow, center, service;
 var coffeeShops = [];
 // Store day of the week to retrieve store business hours
 var day = new Date().getDay() - 1;
+// Store markers by type
+var markerGroups = {
+  "cafe": [],
+  "restaurant": [],
+  "gas_station": []
+};
 
 // Script to set center of map
 function calculateCenter() {
@@ -52,7 +58,7 @@ function initMap() {
     map.setCenter(pos);
 
     // Search query
-    // 20mi search radius around user location for coffee shops
+    // 20 mile (32186.9 meter) search radius around user location for coffee shops
     var request = {
       location: pos,
       radius: '32186.9',
@@ -110,7 +116,7 @@ function callback(results, status, pagnation) {
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                     createMarker(place);
                     console.log(place.name +  results.length + coffeeShops.length);
-                    coffeeShops.push([place.name, place.website, place.rating, place.opening_hours.weekday_text[day], place.url]);
+                    coffeeShops.push([place.name, place.website, place.rating, place.opening_hours.weekday_text[day], place.url, place.types]);
 
                     if(results.length == coffeeShops.length){
                         console.log(coffeeShops);
@@ -131,6 +137,19 @@ function callback(results, status, pagnation) {
     }
   }
 
+  // Toggles visibility of select marker group
+  function toggleGroup(type) {
+    for (var i = 0; i < markerGroups[type].length; i++) {
+        // alert(markerGroups[type][i]);
+        var marker = markerGroups[type][i];
+        if (!marker.getVisible()) {
+            marker.setVisible(true);
+        } else {
+            marker.setVisible(false);
+        }
+    }
+  }
+
   // Creates a marker with an infowindow to display shop info
   function createMarker(place) {
     var image = "images/coffee.png";
@@ -138,11 +157,30 @@ function callback(results, status, pagnation) {
     var marker = new google.maps.Marker({
       map: map,
       icon: image,
+      type: place.types,
       position: place.geometry.location,
       animation: google.maps.Animation.DROP
     });
     google.maps.event.addListener(marker, 'click', function() {
-      infoWindow.setContent("<b>" + place.name + '</b><br><a href="' + place.website + '"" target="new">' + place.website + "</a><br>" + place.opening_hours.weekday_text[day] + '<br><a href="' + place.url + '"" target="new">Navigate</a><br>');
+      infoWindow.setContent("<b>" + place.types + '</b><br><a href="' + place.website + '"" target="new">' + place.website + "</a><br>" + place.opening_hours.weekday_text[day] + '<br><a href="' + place.url + '"" target="new">Navigate</a><br>');
       infoWindow.open(map, this);
     });
+
+    // Place marker in corresponding marker group
+    var markerType = marker.type;
+
+    // Fast food or restaurant
+    if(markerType.includes("restaurant")) {
+        markerGroups["restaurant"].push(marker);
+        return;
+    }
+    // Gas station
+    if(markerType.includes("gas_station")) {
+        markerGroups["gas_station"].push(marker);
+        return;
+    }
+    // Traditional coffee shop (local shop, starbucks, jittery joes, etc)
+    if(markerType.includes("cafe")) {
+        markerGroups["cafe"].push(marker);
+    }
   }
