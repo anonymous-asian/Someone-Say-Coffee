@@ -15,6 +15,10 @@ var markerGroups = {
   "restaurant": [],
   "gas_station": []
 };
+//List of fast food locaiton with coffee
+var fastFood = [
+
+];
 
 // Script to set center of map
 function calculateCenter() {
