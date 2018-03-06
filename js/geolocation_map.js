@@ -166,7 +166,7 @@ function callback(results, status, pagnation) {
       animation: google.maps.Animation.DROP
     });
     google.maps.event.addListener(marker, 'click', function() {
-      infoWindow.setContent("<b>" + place.types + '</b><br><a href="' + place.website + '"" target="new">' + place.website + "</a><br>" + place.opening_hours.weekday_text[day] + '<br><a href="' + place.url + '"" target="new">Navigate</a><br>');
+      infoWindow.setContent("<b>" + place.name + '</b><br><a href="' + place.website + '"" target="new">' + place.website + "</a><br>" + place.opening_hours.weekday_text[day] + '<br><a href="' + place.url + '"" target="new">Navigate</a><br>');
       infoWindow.open(map, this);
     });
 
